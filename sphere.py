@@ -8,11 +8,14 @@ _min = np.minimum
 _max = np.maximum
 _abs = np.abs
 
-grooves = plane(Z).repeat((0,0,1))
+R = 25
+S = 1.2*R
 
-s = sphere(10)
+grooves = plane(Z).repeat((0,0,5))
+
+s = sphere(R)
 s = s.engrave(grooves,.2)
 s = s.engrave(grooves.rotate(pi/3,X),.2)
 s = s.engrave(grooves.rotate(pi/3,Y),.2)
 
-s.save('sphere.stl', samples=256**3)
+s.save('sphere.stl', step=0.2, bounds=((-S, -S, -S), (S, S, S)))

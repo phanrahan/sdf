@@ -1,4 +1,11 @@
+import numpy as np
 from sdf import *
+
+_min = np.minimum
+_max = np.maximum
+
+def _length(a):
+    return np.linalg.norm(a, axis=1)
 
 #MetaCORE surfaces
 

@@ -1,3 +1,5 @@
+# from http://mercury.sexy/hg_sdf/
+
 from math import sqrt
 import numpy as np
 from sdf import *
@@ -30,6 +32,9 @@ def union_chamfer(a, b, r):
         return _min(_min(d1, d2), (d1 - r + d2)*sqrt(0.5))
     return f
 
+# At right-angle intersections between objects,
+# build a new local coordinate system from the two distances 
+# to combine them in interesting ways.
 @op3
 def union_round(a, b, r):
     def f(p):

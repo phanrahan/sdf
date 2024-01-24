@@ -11,12 +11,13 @@ _abs = np.abs
 R = 25
 S = 1.2*R
 G = 0.5
+N = 36
 
 s = sphere(R)
 
 # radial grooves
 
-pattern = flatplane(Y).circular_array(18)
+pattern = flatplane(Y).circular_array(N)
 
 #n = 10
 #pattern = flatplane(X)
@@ -34,9 +35,10 @@ s = s.vgroove(pattern,G)
 
 # parallel grooves
 
-#pattern = flatplane(Z).repeat((0,0,5))
+pattern = flatplane(Z).repeat((0,0,4*R/N))
 
-#s = s.vgroove(pattern,G)
+s = s.vgroove(pattern,G)
+
 #s = s.vgroove(pattern.rotate(pi/2,X),G)
 #s = s.vgroove(pattern.rotate(pi/2,Y),G)
 

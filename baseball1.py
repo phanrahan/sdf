@@ -17,4 +17,5 @@ g = s & (double_cone().rotate(pi /2, X).k(SMOOTH))
 
 baseball = f | g
 
+baseball = baseball.translate((0.1,0.1,0.1))
 baseball.save('baseball1.stl', step=(0.2, 0.2, 0.2), bounds=((-30,-30,-30),(30,30,30)))

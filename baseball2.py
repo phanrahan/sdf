@@ -6,8 +6,7 @@ R = 25.
 SHELL = 0.15*R
 SMOOTH = 1.
 
-
-s = sphere(R).shell(SHELL)
+s = sphere(R) - sphere(R-SHELL)
 
 # cone tip at the north and south poles
 r = sqrt(2)/2
@@ -23,8 +22,14 @@ f &= slab(x0=-2*R, x1=0)
 c1 = double_cone(r).translate((0,0,-R)).rotate(pi /2, X) & plane(-Y)
 c2 = double_cone(r).translate((0,0, R)).rotate(pi /2, X) & plane( Y)
 c = c1 | c2
-g = s & (c & slab(x0=0, x1=2*R))
+#g = f & c 
+g = s & c - slab(x0=-2*R, x1=0)
 
 baseball = f | g
 
+#baseball = f | g.k(4.)
+#baseball &= s
+
+# offset by 1/2 step
+baseball = baseball.translate([.1,.1,.1])
 baseball.save('baseball2.stl', step=(0.2, 0.2, 0.2), bounds=((-30,-30,-30),(30,30,30)))

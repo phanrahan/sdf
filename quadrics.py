@@ -1,6 +1,6 @@
 from math import sqrt
 import numpy as np
-from sdf import *
+from sdf import sdf3
 
 def _length(a):
     return np.linalg.norm(a, axis=1)

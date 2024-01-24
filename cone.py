@@ -1,4 +1,4 @@
-from sdf import *
+from sdf import slab
 from quadrics import double_cone
 
 quad = double_cone()

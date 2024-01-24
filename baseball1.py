@@ -5,7 +5,7 @@ R = 25.
 SHELL = .15*R
 SMOOTH = 1.
 
-s = sphere(R).shell(SHELL)
+s = sphere(R) - sphere(R-SHELL)
 
 # cone tip at the origin
 f = s - double_cone().k(SMOOTH)

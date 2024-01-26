@@ -3,7 +3,6 @@
 from math import sqrt
 import numpy as np
 from sdf import sdf3, op3, X, Y, Z, ORIGIN, UP
-from quadrics import double_cone
 
 _min = np.minimum
 _max = np.maximum
@@ -18,6 +17,17 @@ def _length(a):
 
 def _vec(*arrs):
     return np.stack(arrs, axis=-1)
+
+def gradient(f, p):
+    h = 0.0001 # replace by an appropriate value
+    k0 = np_array((1,-1,-1))
+    k1 = np.array((-1,-1,1))
+    k2 = np.array((-1,1,-1)) 
+    k3 = np.array((1,1,1))
+    return _normalize( k0*f( p + k0*h ) 
+                     + k1*f( p + k1*h )
+                     + k2*f( p + k2*h )
+                     + k3*f( p + k3*h ) )
 
 @sdf3
 def flatplane(normal=UP, point=ORIGIN):

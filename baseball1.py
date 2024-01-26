@@ -1,19 +1,35 @@
 from sdf import *
 from quadrics import double_cone
+from ops import flatplane
 
 R = 25.
 SHELL = .15*R
 SMOOTH = 1.
+G = 0.5
+N = 48
 
-s = sphere(R) - sphere(R-SHELL)
+def slices(d):
+    return flatplane(Z).repeat((0,0,d))
 
-# cone tip at the origin
+
+s = sphere(R) 
+
+lat = slices(4*R/N)
+
+s = s.vgroove(lat,G)
+#s = s.vgroove(lat.rotate( pi/3, X),G)
+#s = s.vgroove(lat.rotate( pi/3, Y),G)
+
+s = s - sphere(R-SHELL)
+
+# cone along Z 
 f = s - double_cone().k(SMOOTH)
 f &= slab(x0=-2*R, x1=0)
 
 #f.save('baseball.stl')
 
-g = s & (double_cone().rotate(pi /2, X).k(SMOOTH))
+# cone along Y
+g = s & (double_cone().orient(Y).k(SMOOTH))
 
 baseball = f | g
 

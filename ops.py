@@ -32,6 +32,7 @@ def vgroove(a, b, r):
     def f(p):
         d1 = a(p)
         d2 = b(p)
+        # groove extends r into a, center of the groove is along b
         return _max(d1, (d1 + r - _abs(d2))*sqrt(0.5))
     return f
 
@@ -41,6 +42,7 @@ def vemboss(a, b, r):
     def f(p):
         d1 = a(p)
         d2 = b(p)
+        # emboss extends r out of a, center of the groove is along b
         return _min(d1, (d1 - r + _abs(d2))*sqrt(0.5))
     return f
 
@@ -50,9 +52,23 @@ def cgroove(a, b, r):
     def f(p):
         d1 = a(p)
         d2 = b(p)
+        # form pipe of radius r at intersection
         d = _length(_vec(d1,d2)) - r
+        # difference(a, d) 
         return _max(d1, -d)
     return f
+
+#// first object gets a capenter-style groove cut out
+#float fOpGroove(float a, float b, float ra, float rb) {
+#   intersect(a, union(erode(a, ra), negate(dilate(abs(b), rb))... 
+#	return max(a, min(a + ra, rb - abs(b)));
+#}
+
+#// first object gets a capenter-style tongue attached
+#float fOpTongue(float a, float b, float ra, float rb) {
+#   union(a, intersection(delate(a, ra), dilate(abs(b), rb))... 
+	#return min(a, max(a - ra, abs(b) - rb));
+#}
 
 @op3
 def union_chamfer(a, b, r):
@@ -74,3 +90,15 @@ def union_round(a, b, r):
         return _max(r, _min (d1, d2)) - _length(u)
     return f
 
+@op3
+def displace( other, displacment ):
+    def f(p):
+        d1 = other(p);
+        d2 = displacement(p);
+        return d1+d2;
+    return f
+
+@op3
+def deform( other, x, y, z ):
+    def f(p):
+        return other( _vec(x(p), y(p), z(p)) );

@@ -1,8 +1,8 @@
 from math import sqrt
 import numpy as np
-from sdf import sphere, X, Y, Z, pi
+from sdf import plane, sphere, X, Y, Z, pi
 from quadrics import double_cone
-from ops import flatplane, cgroove, vgroove, vemboss
+from ops import surface, vgroove, vemboss
 
 _min = np.minimum
 _max = np.maximum
@@ -15,10 +15,10 @@ N = 36
 
 
 def fan(n):
-    return flatplane(Y).circular_array(n)
+    return plane(Y).surface().circular_array(n)
 
 def slices(d):
-    return flatplane(Z).repeat((0,0,d))
+    return plane(Z).surface().repeat((0,0,d))
 
 long = fan(N)
 lat = slices(4*R/N)

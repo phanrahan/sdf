@@ -1,6 +1,6 @@
 from sdf import *
 from quadrics import double_cone
-from ops import flatplane
+from ops import surface
 
 R = 25.
 SHELL = .15*R
@@ -9,7 +9,7 @@ G = 0.5
 N = 48
 
 def slices(d):
-    return flatplane(Z).repeat((0,0,d))
+    return plane(Z).surface().repeat((0,0,d))
 
 
 s = sphere(R) 

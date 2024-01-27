@@ -1,3 +1,6 @@
+# https://github.com/fogleman/sdf/pull/31
+#   see also https://nodtem66.github.io/Scaffolder/tutorial_2/
+
 import numpy as np
 from sdf import *
 

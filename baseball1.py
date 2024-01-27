@@ -5,20 +5,25 @@ from ops import surface
 R = 25.
 SHELL = .15*R
 SMOOTH = 1.
-G = 0.5
+G = 0.25
 N = 48
 
 def slices(d):
     return plane(Z).surface().repeat((0,0,d))
 
+def viviani(r, n):
+    c = cylinder(r).surface().orient(Y).translate((r,0,0))
+    return union(c, *[c.rotate(2*pi*i/n, Y) for i in range(1,n)])
 
 s = sphere(R) 
 
-lat = slices(4*R/N)
+#lat = slices(4*R/N)
 
-s = s.vgroove(lat,G)
+#s = s.vgroove(lat,G)
 #s = s.vgroove(lat.rotate( pi/3, X),G)
 #s = s.vgroove(lat.rotate( pi/3, Y),G)
+
+s = s.vgroove(viviani((1+2*G)*R/2, 2*N), G)
 
 s = s - sphere(R-SHELL)
 

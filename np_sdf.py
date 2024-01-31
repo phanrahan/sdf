@@ -20,6 +20,14 @@ def length(a):
 def dot(a, b):
     return np.sum(a * b, axis=1)
 
+def perpendicular(v):
+    if v[1] == 0 and v[2] == 0:
+        if v[0] == 0:
+            raise ValueError('zero vector')
+        else:
+            return np.cross(v, [0, 1, 0])
+    return np.cross(v, [1, 0, 0])
+
 def vec(*arrs):
     return np.stack(arrs, axis=-1)
 

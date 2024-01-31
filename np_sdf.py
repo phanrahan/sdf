@@ -3,11 +3,21 @@ import numpy as np
 min = np.minimum
 max = np.maximum
 abs = np.absolute
+
 sin = np.sin
 cos = np.cos
-atan2 = np.arctan
+tan = np.tan
+#cot = np.cot
+atan = np.arctan
+atan2 = np.arctan2
+
 sinh = np.sinh
 cosh = np.cosh
+tanh = np.tanh
+arcsinh = np.arcsinh
+arccosh = np.arccosh
+artansh = np.arctanh
+
 exp = np.exp
 log = np.log
 

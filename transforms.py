@@ -1,18 +1,23 @@
-from np_sdf import np, length, clamp, smoothstep
+from np_sdf import np, vec, length, tan, cot, atan2, arcsinh, clamp, smoothstep
 from sdf import op3
 
 # coordinate systems
 
 # cylindrical 
-#def cylindrical(p):
-#    r = length(_vec(x,y))
-#    theta = np.atan2(y,x)
+def cylindrical(p):
+    r = length(vec(x,y))
+    theta = atan2(y,x)
 
-# spherical
-#def spherical(p):
-#    r = length(p)
-#    theta = np.atan2(y,x)
-#    phi = np.atan2(_length(_vec(x,y)), z)
+def spherical(p):
+    r = length(p)
+    theta = atan2(y,x)
+    phi = atan2(length(vec(x,y)), z)
+
+def rhumb(p):
+    pass
+    #theta = theta - theta0
+    #phi = arcsinh(tan(phi))
+    #phi = m * theta where m = cot(beta)
 
 # reflect
 
@@ -25,7 +30,7 @@ from sdf import op3
 # bend
 
 @op3
-def twist(other, k):
+def spherical_twist(other, k):
     def f(p):
         x = p[:,0]
         y = p[:,1]

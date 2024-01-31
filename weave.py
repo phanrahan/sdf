@@ -1,9 +1,10 @@
 from math import sqrt
-from sdf import *
+from np_sdf import vec3
+from sdf import rounded_box, cylinder, slab, ease, X, Y, Z
 
 root3 = sqrt(3.0)
 s = 2.7
-unit = s * np.array((1,root3,0))
+unit = s * vec3((1,root3,0))
 
 
 f = rounded_box([3.2, 1, 0.25], 0.1).translate((1.5, 0, 0.0625))

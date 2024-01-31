@@ -11,5 +11,5 @@ def tet(f):
     return tet2(tet1(f))
 
 f = sphere(.1).translate((1,1,1))
-f = tet1(f)
+f = tet2(f)
 f.save('tet.stl', bounds=((-4, -4, -4), (4, 4, 4)))

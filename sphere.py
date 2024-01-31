@@ -1,6 +1,5 @@
-from math import sqrt
-import numpy as np
-from sdf import union, plane, sphere, cylinder, X, Y, Z, pi
+from math import pi, sqrt
+from sdf import union, plane, sphere, cylinder, X, Y, Z
 from quadrics import double_cone
 from ops import fan, slices, surface, vgroove, vemboss
 

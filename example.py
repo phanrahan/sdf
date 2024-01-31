@@ -1,4 +1,4 @@
-from sdf import *
+from sdf import sphere
 
 f = sphere(1) 
 

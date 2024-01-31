@@ -1,4 +1,4 @@
-from sdf import *
+from sdf import rounder_cylinder, cylinder, box
 
 # main body
 f = rounded_cylinder(1, 0.1, 5)

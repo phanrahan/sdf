@@ -1,16 +1,16 @@
-import numpy as np
+from np_sdf import np, length, clamp, smoothstep
 from sdf import op3
 
 # coordinate systems
 
 # cylindrical 
 #def cylindrical(p):
-#    r = _length(_vec(x,y))
+#    r = length(_vec(x,y))
 #    theta = np.atan2(y,x)
 
 # spherical
 #def spherical(p):
-#    r = _length(p)
+#    r = length(p)
 #    theta = np.atan2(y,x)
 #    phi = np.atan2(_length(_vec(x,y)), z)
 
@@ -23,15 +23,6 @@ from sdf import op3
 # twist/helix
 
 # bend
-
-def _vec(*arrs):
-    return np.stack(arrs, axis=-1)
-
-def smoothstep (x):
-    return x * x * (3.0 - 2.0 * x);
-
-def clamp(x, min=0., max=1.):
-    return np.where(x < min, min, np.where(x > max, max, x))
 
 @op3
 def twist(other, k):
@@ -48,4 +39,12 @@ def twist(other, k):
         z2 = z
         return other(_vec(x2, y2, z2))
     return f
+
+
+#m = np.array([
+#    [1-2*x*x,  -2*x*y,  -2*x*z],
+#    [ -2*x*y, 1-2*y*y,  -2*y*z],
+#    [ -2*x*z,  -2*y*z, 1-2*z*z],
+#    ]).T
+#p = np.dot(p, m)
 

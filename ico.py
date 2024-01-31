@@ -5,21 +5,8 @@
 # https:#en.wikipedia.org/wiki/Icosahedral_symmetry
 
 from math import sqrt, tan, pi
-import numpy as np
+from np_sdf import abs, vec3, mat3, matmul
 from sdf import sdf3, sphere
-
-def abs(p):
-    return np.abs(p)
-
-def vec3(*p):
-    return np.array(p)
-
-def mat3(*m):
-    return np.array(m).reshape(3,3)
-
-def matmul(m, p):
-    return (m @ p.transpose()).transpose()
-
 
 PHI = (1.+sqrt(5.))/2.
 A = PHI / sqrt( 1. + PHI*PHI )

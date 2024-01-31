@@ -1,4 +1,5 @@
-from sdf import *
+from math import pi
+from sdf import sphere, cylinder, slab, union, X, Y, Z
 from quadrics import double_cone
 from ops import fan, slices, surface
 

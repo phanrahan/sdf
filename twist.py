@@ -1,7 +1,5 @@
-from math import sqrt
-import numpy as np
-from sdf import op3, union, plane, sphere, cylinder, box, X, Y, Z, pi
-from transforms import twist
+from math import pi
+from sdf import box
 
 s = box((1,0.02,1)).twist(pi/2)
 

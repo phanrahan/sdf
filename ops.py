@@ -2,7 +2,7 @@
 # explained in more detail at https://www.ronja-tutorials.com/
 
 from math import sqrt
-from np_sdf import np, abs, min, max, length
+from np_sdf import np, abs, min, max, vec, vec3, length
 from sdf import sdf3, op3, plane, X, Y, Z, ORIGIN, UP
 
 def gradient(f, p):
@@ -29,6 +29,12 @@ def slices(d):
 def surface(other):
     def f(p):
         return abs(other(p))
+    return f
+
+@op3
+def sweep(a, b, dist2):
+    def f(p):
+        return dist2(vec(a(p), b(p)))
     return f
 
 # first object gets a v-shaped engraving where it intersect the second

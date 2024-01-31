@@ -3,18 +3,20 @@
 
 from math import sqrt
 import numpy as np
-from sdf import sdf3, op3, X, Y, Z, ORIGIN, UP
+from sdf import sdf3, op3, plane, X, Y, Z, ORIGIN, UP
 
 _min = np.minimum
 _max = np.maximum
-_abs = np.abs
-_dot = np.dot
+_abs = np.absolute
 
 def _normalize(a):
     return a / np.linalg.norm(a)
 
 def _length(a):
     return np.linalg.norm(a, axis=1)
+
+def _dot(a, b):
+    return np.sum(a * b, axis=1)
 
 def _vec(*arrs):
     return np.stack(arrs, axis=-1)
@@ -29,6 +31,15 @@ def gradient(f, p):
                      + k1*f( p + k1*h )
                      + k2*f( p + k2*h )
                      + k3*f( p + k3*h ) )
+
+@sdf3
+def fan(n):
+    return plane(Y).surface().circular_array(n)
+
+@sdf3
+def slices(d):
+    return plane(Z).surface().repeat((0,0,d))
+
 
 @op3
 def surface(other):
@@ -71,13 +82,13 @@ def cgroove(a, b, r):
 #// first object gets a capenter-style groove cut out
 #float fOpGroove(float a, float b, float ra, float rb) {
 #   intersect(a, union(erode(a, ra), negate(dilate(abs(b), rb))... 
-#	return max(a, min(a + ra, rb - abs(b)));
+#	return _max(a, min(a + ra, rb - _abs(b)));
 #}
 
 #// first object gets a capenter-style tongue attached
 #float fOpTongue(float a, float b, float ra, float rb) {
 #   union(a, intersection(delate(a, ra), dilate(abs(b), rb))... 
-	#return min(a, max(a - ra, abs(b) - rb));
+	#return _min(a, _max(a - ra, _abs(b) - rb));
 #}
 
 # https://www.ronja-tutorials.com/post/035-2d-sdf-combination/#champfer

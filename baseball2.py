@@ -1,5 +1,5 @@
 from math import sqrt
-from sdf import *
+from sdf import sphere, plane, slab, X, Y, Z, pi
 from quadrics import double_cone
 
 R = 25.

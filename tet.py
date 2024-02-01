@@ -21,9 +21,9 @@ def tet(f):
     return tet2(tet1(f))
 
 f = sphere(.1).translate(TET2VERT)
-f |= sphere(.1).translate(TET2MIDEDGE)
-f |= sphere(.1).translate(TET2MIDFACE)
-f = tet1(f)
+#f |= sphere(.1).translate(TET2MIDEDGE)
+#f |= sphere(.1).translate(TET2MIDFACE)
+f = tet2(f)
 
 D = 2
 f.save('tet.stl', step=D/128, bounds=((-D, -D, -D), (D, D, D)))

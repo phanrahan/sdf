@@ -79,4 +79,6 @@ def icosahedron(fund):
 f = sphere(0.1).translate(ICOVERTEX)
 #f = sphere(0.1).translate(ICOMIDFACE)
 f = icosahedron( f )
-f.save('ico.stl', bounds=((-4, -4, -4), (4, 4, 4)))
+
+D = 2
+f.save('ico.stl', step=D/128, bounds=((-D, -D, -D), (D, D, D)))

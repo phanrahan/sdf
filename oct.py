@@ -17,4 +17,6 @@ def oct(f):
 #f = sphere(0.1).translate((1,1,1))
 f = sphere(0.1).translate((1,0,0))
 f = oct1(f)
-f.save('oct.stl', bounds=((-4, -4, -4), (4, 4, 4)))
+
+D = 2
+f.save('oct.stl', step=D/128, bounds=((-D, -D, -D), (D, D, D)))

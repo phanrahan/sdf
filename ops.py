@@ -2,8 +2,8 @@
 # explained in more detail at https://www.ronja-tutorials.com/
 
 from math import sqrt
-from np_sdf import np, abs, min, max, vec, vec3, length
-from sdf import sdf3, op3, plane, X, Y, Z, ORIGIN, UP
+from np_sdf import np, abs, min, max, vec, vec3, vec2d, length
+from sdf import sdf3, op3, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
 
 def gradient(f, p):
     h = 0.0001 # replace by an appropriate value
@@ -32,48 +32,21 @@ def surface(other):
     return f
 
 @op3
-def sweep(a, b, dist2):
+def sweep(a, b, c2):
     def f(p):
-        return dist2(vec(a(p), b(p)))
+        return c2( vec2d(a(p), b(p)) )
     return f
+
+def pipe(a, b, r=1):
+    return sweep(a, b, circle(r))
 
 # first object gets a v-shaped engraving where it intersect the second
-@op3
-def vgroove(a, b, r):
-    def f(p):
-        d1 = a(p)
-        d2 = b(p)
-        # groove extends r into a, center of the groove is along b
-        return max(d1, (d1 + r - abs(d2))*sqrt(0.5))
-    return f
+def groove(a, b, c):
+    return a - sweep(a, b, c)
 
 # first object gets a v-shaped engraving where it intersect the second
-@op3
-def vemboss(a, b, r):
-    def f(p):
-        d1 = a(p)
-        d2 = b(p)
-        # emboss extends r out of a, center of the groove is along b
-        return min(d1, (d1 - r + abs(d2))*sqrt(0.5))
-    return f
-
-# first object gets a circula-shaped engraving where it intersect the second
-@op3
-def cgroove(a, b, r):
-    def f(p):
-        d1 = a(p)
-        d2 = b(p)
-        # form pipe of radius r at intersection
-        d = length(vec(d1,d2)) - r
-        # difference(a, d) 
-        return max(d1, -d)
-    return f
-
-#// first object gets a capenter-style groove cut out
-#float fOpGroove(float a, float b, float ra, float rb) {
-#   intersect(a, union(erode(a, ra), negate(dilate(abs(b), rb))... 
-#	return max(a, min(a + ra, rb - abs(b)));
-#}
+def emboss(a, b, c):
+    return a | sweep(a, b, c)
 
 #// first object gets a capenter-style tongue attached
 #float fOpTongue(float a, float b, float ra, float rb) {
@@ -89,26 +62,26 @@ def cgroove(a, b, r):
 # two-body = D/S
 #
 # also intersection_chamfer, difference_chamfer
-@op3
-def union_chamfer(a, b, r):
-    def f(p):
-        d1 = a(p)
-        d2 = b(p)
-        # union( union(a,b), dilate(S(a,b), r))
-        return min(min(d1, d2), (d1 + d2 - r)*sqrt(0.5))
-    return f
+#@op3
+#def union_chamfer(a, b, r):
+#    def f(p):
+#        d1 = a(p)
+#        d2 = b(p)
+#        # union( union(a,b), dilate(S(a,b), r))
+#        return min(min(d1, d2), (d1 + d2 - r)*sqrt(0.5))
+#    return f
 
 # At right-angle intersections between objects,
 # build a new local coordinate system from the two distances 
 # to combine them in interesting ways.
-@op3
-def union_round(a, b, r):
-    def f(p):
-        d1 = a(p)
-        d2 = b(p)
-        u = max(vec(r - d1,r - d2), vec3((0,0)))
-        return max(r, min (d1, d2)) - length(u)
-    return f
+#@op3
+#def union_round(a, b, r):
+#    def f(p):
+#        d1 = a(p)
+#        d2 = b(p)
+#        u = max(vec(r - d1,r - d2), vec3((0,0)))
+#        return max(r, min (d1, d2)) - length(u)
+#    return f
 
 @op3
 def displace( other, displacment ):

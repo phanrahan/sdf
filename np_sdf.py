@@ -44,6 +44,10 @@ def vec(*arrs):
 def vec3(*p):
     return np.array(p)
 
+# numpy funkiness to convert 2 signed distance calculations to a vector
+def vec2d(d1,d2):
+    return vec(d1.reshape(-1),d2.reshape(-1))
+
 def mat3(*m):
     return np.array(m).reshape(3,3)
 

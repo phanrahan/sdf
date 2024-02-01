@@ -19,9 +19,10 @@ diag1 = fan(N).twist( pi/2).scale(R)
 diag2 = fan(N).twist(-pi/2).scale(R)
 
 s = sphere(R)
+s = s.vgroove(plane(Z),G)
 
-s = s.vgroove(diag1,G)
-s = s.vgroove(diag2,G)
+#s = s.vgroove(diag1,G)
+#s = s.vgroove(diag2,G)
 
 #s = s.vgroove(lat,G)
 #s = s.vgroove(lat.orient(X),G)

@@ -1,11 +1,11 @@
-from math import pi, sqrt
-from sdf import union, plane, sphere, cylinder, X, Y, Z
+from math import pi
+from sdf import union, plane, sphere, cylinder, rectangle, X, Y, Z
 from quadrics import double_cone
-from ops import fan, slices, surface, vgroove, vemboss
+from ops import fan, slices, surface, groove, emboss, place
 
 R = 25
-G = 0.25
-N = 36
+N = 18
+G = rectangle(0.25).rotate(pi/4)
 
 def viviani(r, n):
     c = cylinder(r).surface().translate((r,0,0))
@@ -19,19 +19,25 @@ diag1 = fan(N).twist( pi/2).scale(R)
 diag2 = fan(N).twist(-pi/2).scale(R)
 
 s = sphere(R)
-s = s.vgroove(plane(Z),G)
 
-#s = s.vgroove(diag1,G)
-#s = s.vgroove(diag2,G)
+#s = groove(s, plane(Z), G)
 
-#s = s.vgroove(lat,G)
-#s = s.vgroove(lat.orient(X),G)
-#s = s.vgroove(lat.orient(Y),G)
+#s = groove(s,lat,G)
+#s = groove(s,long,G)
 
-#s = s.vgroove(viv, G)
+s |= place(s,lat,long, sphere(0.5))
 
-#s = s.vgroove(long,G)
-#s = s.vgroove(long.orient(X),G)
-#s = s.vgroove(long.orient(Y),G)
+#s = groove(s,diag1,G)
+#s = groove(s,diag2,G)
+
+#s = groove(s,lat,G)
+#s = groove(s,lat.orient(X),G)
+#s = groove(s,lat.orient(Y),G)
+
+#s = groove(s,viv, G)
+
+#s = groove(s,long,G)
+#s = groove(s,long.orient(X),G)
+#s = groove(s,long.orient(Y),G)
 
 s.save('sphere.stl', step=0.2, bounds=((-30, -30, -30), (30, 30, 30)))

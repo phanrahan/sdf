@@ -48,6 +48,11 @@ def vec3(*p):
 def vec2d(d1,d2):
     return vec(d1.reshape(-1),d2.reshape(-1))
 
+# numpy funkiness to convert 3 signed distance calculations to a vector
+def vec3d(d1,d2,d3):
+    return vec(d1.reshape(-1),d2.reshape(-1),d3.reshape(-1))
+
+
 def mat3(*m):
     return np.array(m).reshape(3,3)
 

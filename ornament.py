@@ -2,7 +2,7 @@ import fire
 from math import pi
 from sdf import plane, slab, sphere, rectangle, X, Y, Z
 from quadrics import double_cone
-from ops import fan, slices, groove
+from ops import fan, slices, groove, place
 
 
 class App(object):
@@ -18,6 +18,12 @@ class App(object):
 
     def ball(self):
         self.name = 'ball'
+
+    def dots(self):
+        f = fan(N)
+        diag1 = f.twist( pi).scale(R)
+        diag2 = f.twist(-pi).scale(R)
+        self.s |= self.place(s, diag1.orient(X), diag2.orient(X), sphere())
 
     def diamond(self):
         f = fan(self.N)

@@ -20,10 +20,11 @@ class App(object):
         self.name = 'ball'
 
     def dots(self):
-        f = fan(N)
-        diag1 = f.twist( pi).scale(R)
-        diag2 = f.twist(-pi).scale(R)
-        self.s |= self.place(s, diag1.orient(X), diag2.orient(X), sphere())
+        f = fan(self.N)
+        diag1 = f.twist( pi).scale(self.R)
+        diag2 = f.twist(-pi).scale(self.R)
+        self.s |= place(self.s, diag1.orient(X), diag2.orient(X), sphere())
+        self.name = 'dots'
 
     def diamond(self):
         f = fan(self.N)

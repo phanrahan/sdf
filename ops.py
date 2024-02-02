@@ -3,7 +3,7 @@
 
 from math import sqrt
 from np_sdf import np, abs, min, max, vec, vec3, vec2d, vec3d, length
-from sdf import sdf3, op3, union, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
+from sdf import sdf3, op3, union, intersection, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
 
 def gradient(f, p):
     h = 0.0001 # replace by an appropriate value
@@ -24,7 +24,7 @@ def fan(n):
 def slices(d):
     return plane(Z).surface().repeat((0,0,d))
 
-
+# shell(other, 0)
 @op3
 def surface(other):
     def f(p):
@@ -54,8 +54,20 @@ def groove(a, b, c):
 def emboss(a, b, c):
     return a | sweep(a, b, c)
 
-def fillet(a, b, r):
-    return union(a.dilate(r), b.dilate(r)).erode(r)
+def union_round(a, b, r):
+    u = a | b
+    c = rectangle(r).translate((r/2,r/2))-circle(r).translate((r,r))
+    f = sweep(a, b, c)
+    return u | f
+
+def intersection_round(a, b, r):
+    i = a & b
+    c = rectangle(r).translate((-r/2,-r/2))-circle(r).translate((-r,-r))
+    f = sweep(a, b, c)
+    return i - f
+
+def difference_round(a, b, r):
+    return intersection_round(a, negate(b), r)
 
 @op3
 def displace( other, displacment ):

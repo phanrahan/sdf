@@ -1,16 +1,23 @@
-from sdf import union, sphere, box, rounded_box
-from ops import fillet
+from sdf import union, intersection, difference, sphere, box, circle, rectangle
+from ops import union_round, intersection_round, sweep
 
 R = 25
-G = 5
+G = 2
 
-s = sphere(R)
+#a = sphere(R)
+a = box(2*R)
 b = box(R).translate((R,0,0))
-#b = rounded_box(R,G).translate((R,0,0))
 
-#r = fillet(s, b, 5)
-#r = b.erode(G)
-r = b
-#r = union(s.erode(G), b.erode(5))
+r = union_round(a, b, G)
+#u = union(a,b)
+#c = rectangle(G).translate((G/2,G/2))-circle(G).translate((G,G))
+#f = sweep(a, b, c)
+#r = union(u, f)
 
-r.save('fillet.stl', step=0.2, bounds=((-30, -30, -30), (30, 30, 30)))
+#r = intersection_round(a, b, G)
+#u = intersection(a,b)
+#c = rectangle(G).translate((-G/2,-G/2))-circle(G).translate((-G,-G))
+#f = sweep(a, b, c)
+#r = u-f
+
+r.save('fillet.stl', step=0.1, bounds=((-60, -60, -60), (60, 60, 60)))

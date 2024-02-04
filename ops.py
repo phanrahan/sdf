@@ -3,7 +3,7 @@
 
 from math import sqrt
 from np_sdf import np, abs, min, max, vec, vec3, vec2d, vec3d, length
-from sdf import sdf3, op3, union, intersection, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
+from sdf import sdf2, sdf3, op3, union, intersection, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
 
 def gradient(f, p):
     h = 0.0001 # replace by an appropriate value
@@ -81,3 +81,28 @@ def displace( other, displacment ):
 def deform( other, x, y, z ):
     def f(p):
         return other( vec(x(p), y(p), z(p)) );
+
+@sdf2
+def polygon(points):
+    points = [np.array(p) for p in points]
+    def f(p):
+        n = len(points)
+        d = dot(p - points[0], p - points[0])
+        s = np.ones(len(p))
+        for i in range(n):
+            j = (i + n - 1) % n
+            vi = points[i]
+            vj = points[j]
+            if np.array_equal(vi, vj):
+                continue
+            e = vj - vi
+            w = p - vi
+            b = w - e * np.clip(np.dot(w, e) / np.dot(e, e), 0, 1).reshape((-1, 1))
+            d = min(d, dot(b, b))
+            c1 = p[:,1] >= vi[1]
+            c2 = p[:,1] < vj[1]
+            c3 = e[0] * w[:,1] > e[1] * w[:,0]
+            c = vec(c1, c2, c3)
+            s = np.where(np.all(c, axis=1) | np.all(~c, axis=1), -s, s)
+        return s * np.sqrt(d)
+    return f

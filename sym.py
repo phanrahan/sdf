@@ -1,6 +1,13 @@
 from np_sdf import np, abs, min, max, vec3, dot, normalize
 from sdf import op3
 
+def foldp(p, n):
+    p = nd.array(p)
+    n /= sqrt(n)
+    d = min(sum(p*n), 0)
+    p -= 2. * d * n
+    return p
+
 @op3
 def fold(other, n=None):
     if n is not None:

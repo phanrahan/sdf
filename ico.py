@@ -114,7 +114,7 @@ def fullicosahedron(fund):
     return f
 
 
-def icosahedron(fund):
+def ico(fund):
     return fund.fold(V2-V1).fold(V3-V2).fold(V1-V3).fold()
     #return fund.fold(V2-V1).fold().fold(V3-V2).fold().fold(V1-V3).fold()
 
@@ -136,7 +136,7 @@ s = groove(sphere(R),e,g)
 #s3 = capsule(V3, V1,0.1)
 #s = s1 | s2 | s3
 
-s = icosahedron(s)
+s = ico(s)
 
 D = R+5
 step = D/128

@@ -115,7 +115,7 @@ def fullicosahedron(fund):
 
 
 def ico(fund):
-    return fund.fold(V2-V1).fold(V3-V2).fold(V1-V3).fold()
+    return fund.fold(cross(V1,V2)).fold(cross(V2,V3)).fold(cross(V3,V1)).fold()
     #return fund.fold(V2-V1).fold().fold(V3-V2).fold().fold(V1-V3).fold()
 
 R = 25

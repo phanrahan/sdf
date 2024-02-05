@@ -82,6 +82,8 @@ def deform( other, x, y, z ):
     def f(p):
         return other( vec(x(p), y(p), z(p)) );
 
+# https://www.shadertoy.com/view/3lBfRK
+
 @sdf2
 def polygon(points):
     points = [np.array(p) for p in points]

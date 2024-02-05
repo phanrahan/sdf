@@ -1,12 +1,43 @@
-# https:#www.shadertoy.com/view/wdcczs
-# https:#www.shadertoy.com/view/lsV3RV
+# https:/www.shadertoy.com/view/wdcczs
+#define sabs(p) sqrt((p)*(p)+2e-3)
+#define smin(a,b) (a+b-sabs(a-b))*.5
+#define smax(a,b) (a+b+sabs(a-b))*.5
+
+#float dodec(vec3 p,float r){
+#	float G=sqrt(5.)*.5+.5;
+#	vec3 n=normalize(vec3(G,1,0));
+#	float d=0.;
+#    p=sabs(p);
+#    d=smax(d,dot(p,n));
+#    d=smax(d,dot(p,n.yzx));
+#    d=smax(d,dot(p,n.zxy));
+#	return d-r;
+#}
+
+#float icosa(vec3 p,float r){
+#	float G=sqrt(5.)*.5+.5;
+#	vec3 n=normalize(vec3(G,1./G,0));
+#	float d=0.;
+#    p=sabs(p);
+#    d=smax(d,dot(p,n));
+#    d=smax(d,dot(p,n.yzx));
+#    d=smax(d,dot(p,n.zxy));
+#	d=smax(d,dot(p,normalize(vec3(1))));
+#   return d-r;
+
+
+# https:/www.shadertoy.com/view/lsV3RV
+
+# https://www.shadertoy.com/view/XlX3zB
 
 # icosahedral symmetry
-# https:#en.wikipedia.org/wiki/Icosahedral_symmetry
+# https:/en.wikipedia.org/wiki/Icosahedral_symmetry
 
 from math import sqrt, tan, pi
-from np_sdf import abs, vec3, mat3, matmul
-from sdf import sdf3, sphere
+from np_sdf import abs, sign, min, cross, vec3, mat3, matmul
+from sdf import sdf3, sphere, capsule, plane, rectangle
+from ops import surface, groove
+import sym
 
 PHI = (1.+sqrt(5.))/2.
 A = PHI / sqrt( 1. + PHI*PHI )
@@ -14,6 +45,10 @@ B = 1. / sqrt( 1. + PHI*PHI )
 ICOVERTEX  = vec3(0,A,B)
 ICOMIDFACE = vec3(0,A,B)*(1./3.) + vec3(0,0,A)*(2./3.)
 ICOMIDEDGE = vec3(0,A,B)*.5 + vec3(B,0,A)*.5
+
+V1 = vec3(0,A,B)
+V2 = vec3(B,0,A)
+V3 = vec3(A,B,0)
 
 J = 0.309016994375
 K = J+.5
@@ -41,11 +76,27 @@ O4 = vec3(A/3./tan(pi/5.),A/3.,0.63147573033330584)
 #
 # this is equivalent to dodecahedral symmetry (12x faces, 10x within face)
 # (formula by DjinnKahn)
-def opIcosahedron( p ):
+def opFullIcosahedron( p ):
     p = matmul( R0, abs( p ) )
     p = matmul( R1, abs( p ) )
     p = matmul( R2, abs( p ) )
     return abs( p )
+
+# same as opIcosahedron, except without mirroring symmetry, so X-coordinate may be negative
+# (note: when this is used as a distance function, it's possible that the nearest object is
+# on the opposite polarity, potentially causing a glitch)
+def opIcosahedron( p ):
+    pol = sign( p )
+    p = matmul( R0, abs( p ) )
+    pol *= sign( p )
+    p = matmul( R1, abs( p ) )
+    pol *= sign( p )
+    p = matmul( R2, abs( p ) )
+    pol *= sign( p )
+    ret1 = abs( p )
+    ret2 = ret1
+    ret2[:,0] = pol[:,0] * pol[:,1] * pol[:,2] * ret1[:,0]
+    return min(ret1,ret2)
 
 
 # rotate and translate `opIcosahedron` so that
@@ -56,29 +107,36 @@ def opIcosahedron( p ):
 def opAlignedIcosahedron( p, radius ):
     return matmul( R3, opIcosahedron( p ) ) - O3 * radius
 
-#normalize(vec3(0, 1, PHI+1)),
-#normalize(vec3(0, -1, PHI+1)),
-#normalize(vec3(PHI+1, 0, 1)),
-#normalize(vec3(-PHI-1, 0, 1)),
-#normalize(vec3(1, PHI+1, 0)),
-#normalize(vec3(-1, PHI+1, 0)),
-#
-#normalize(vec3(0, PHI, 1)),
-#normalize(vec3(0, -PHI, 1)),
-#normalize(vec3(1, 0, PHI)),
-#normalize(vec3(-1, 0, PHI)),
-#normalize(vec3(PHI, 1, 0)),
-#normalize(vec3(-PHI, 1, 0))
-
 @sdf3
-def icosahedron(fund):
+def fullicosahedron(fund):
     def f(p):
          return fund(opIcosahedron(p))
     return f
 
-f = sphere(0.1).translate(ICOVERTEX)
-#f = sphere(0.1).translate(ICOMIDFACE)
-f = icosahedron( f )
 
-D = 2
-f.save('ico.stl', step=D/128, bounds=((-D, -D, -D), (D, D, D)))
+def icosahedron(fund):
+    return fund.fold().fold(V2-V1).fold(V3-V2).fold(V1-V3)
+
+R = 25
+G = 2
+
+e1 = surface(plane(cross(V1, V2)))
+e2 = surface(plane(cross(V2, V3)))
+e3 = surface(plane(cross(V3, V1)))
+e = e1 | e2 | e2
+g = rectangle(G).rotate(pi/4)
+s = groove(sphere(R),e,g)
+
+#s1 = sphere(0.1).translate(V1)
+#s2 = sphere(0.1).translate(V2)
+#s3 = sphere(0.1).translate(V3)
+#s1 = capsule(V1, V2,0.1)
+#s2 = capsule(V2, V3,0.1)
+#s3 = capsule(V3, V1,0.1)
+#s = s1 | s2 | s3
+
+s = icosahedron(s)
+
+D = R+5
+step = D/128
+s.translate((step/2,step/2,step/2)).save('ico.stl', step=step, bounds=((-D, -D, -D), (D, D, D)))

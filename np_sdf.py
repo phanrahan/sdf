@@ -3,6 +3,7 @@ import numpy as np
 min = np.minimum
 max = np.maximum
 abs = np.absolute
+sign = np.sign
 
 sin = np.sin
 cos = np.cos
@@ -29,6 +30,9 @@ def length(a):
 
 def dot(a, b):
     return np.sum(a * b, axis=1)
+
+def cross(a,b):
+    return np.cross(a,b)
 
 def perpendicular(v):
     if v[1] == 0 and v[2] == 0:

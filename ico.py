@@ -46,9 +46,9 @@ ICOVERTEX  = vec3(0,A,B)
 ICOMIDFACE = vec3(0,A,B)*(1./3.) + vec3(0,0,A)*(2./3.)
 ICOMIDEDGE = vec3(0,A,B)*.5 + vec3(B,0,A)*.5
 
-V1 = vec3(0,A,B)
-V2 = vec3(B,0,A)
-V3 = vec3(A,B,0)
+V1 = vec3(B,0,A)
+V2 = vec3(A,B,0)
+V3 = vec3(0,A,B)
 
 J = 0.309016994375
 K = J+.5
@@ -115,7 +115,7 @@ def fullicosahedron(fund):
 
 
 def icosahedron(fund):
-    return fund.fold().fold(V2-V1).fold(V3-V2).fold(V1-V3)
+    return fund.fold(V2-V1).fold(V3-V2).fold(V1-V3).fold()
 
 R = 25
 G = 2
@@ -123,7 +123,7 @@ G = 2
 e1 = surface(plane(cross(V1, V2)))
 e2 = surface(plane(cross(V2, V3)))
 e3 = surface(plane(cross(V3, V1)))
-e = e1 | e2 | e2
+e = e1 | e3 | e2
 g = rectangle(G).rotate(pi/4)
 s = groove(sphere(R),e,g)
 

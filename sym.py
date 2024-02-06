@@ -1,16 +1,8 @@
-from np_sdf import np, abs, min, max, vec3, dot, normalize
-from sdf import op3
+from math import pi
+from np_sdf import np, abs, min, vec3, dot, cross, normalize
+from ops import surface, groove
+from sdf import op3, plane, rectangle
 
-#def dot(u,v):
-#    return np.sum(u*v)
-#
-#def foldp(p, n):
-#    p = np.array(p)
-#    n = n/sqrt(dot(n,n))
-#    d = min(dot(p,n), 0)
-#    p = p - 2. * d * n
-#    return p
-    
 @op3
 def fold(other, n=None):
     if n is not None:
@@ -23,4 +15,12 @@ def fold(other, n=None):
             p -= 2 * np.outer(d, n)
         return other(p)
     return f
+
+def subdivide(s, G, V1, V2, V3):
+    e1 = surface(plane(cross(V1, V2)))
+    e2 = surface(plane(cross(V2, V3)))
+    e3 = surface(plane(cross(V3, V1)))
+    e = e1 | e3 | e2
+    g = rectangle(G).rotate(pi/4)
+    return groove(s,e,g)
 

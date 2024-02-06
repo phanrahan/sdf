@@ -1,8 +1,8 @@
 from math import sqrt, pi
-from np_sdf import vec3, cross
-from sdf import sdf3, sphere, capsule, plane, rectangle
+from np_sdf import vec3, cross 
+from sdf import sphere, plane, rectangle
 from ops import surface, groove
-import sym
+from sym import subdivide
 
 PHI = (1.+sqrt(5.))/2.
 A = PHI / sqrt( 1. + PHI*PHI )
@@ -19,14 +19,7 @@ if __name__ == '__main__':
     R = 25
     G = 2
 
-    e1 = surface(plane(cross(V1, V2)))
-    e2 = surface(plane(cross(V2, V3)))
-    e3 = surface(plane(cross(V3, V1)))
-    e = e1 | e3 | e2
-
-    g = rectangle(G).rotate(pi/4)
-
-    s = groove(sphere(R),e,g)
+    s = subdivide(sphere(R), G, V1, V2, V3)
 
     s = ico(s)
 

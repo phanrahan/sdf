@@ -26,6 +26,14 @@ class App(object):
         self.s |= place(self.s, diag1.orient(X), diag2.orient(X), sphere())
         self.name = 'dots'
 
+    def rhumb(self):
+        f = fan(self.N)
+        diag1 = f.rhumb( pi/4).scale(self.R)
+        diag2 = f.rhumb(-pi/4).scale(self.R)
+        self.s = groove(self.s, diag1.orient(X), self.groove)
+        self.s = groove(self.s, diag2.orient(X), self.groove)
+        self.name = 'rhumb'
+
     def diamond(self):
         f = fan(self.N)
         diag1 = f.twist( pi).scale(self.R)

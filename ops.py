@@ -2,7 +2,7 @@
 # explained in more detail at https://www.ronja-tutorials.com/
 
 from math import sqrt
-from np_sdf import np, abs, min, max, vec, vec3, vec2d, vec3d, length
+from np_sdf import np, abs, min, max, vec, vec3, vec2d, vec3d, length, tan, atan2, cos, sin, arcsinh
 from sdf import sdf2, sdf3, op3, union, intersection, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
 
 def gradient(f, p):
@@ -23,6 +23,25 @@ def fan(n):
 @sdf3
 def slices(d):
     return plane(Z).surface().repeat((0,0,d))
+
+# loxodrome or rhumb line - constant bearing
+#   https://en.wikipedia.org/wiki/Rhumb_line
+@op3
+def rhumb(other, beta):
+    tanbeta = 1/tan(beta)
+    def f(p):
+        x = p[:,0]
+        y = p[:,1]
+        z = p[:,2]
+        phi = atan2(z,length(vec(x,y)))
+        theta = tanbeta * arcsinh(tan(phi))
+        c = cos(-theta)
+        s = sin(-theta)
+        x2 = c * x - s * y
+        y2 = s * x + c * y
+        z2 = z
+        return other(vec(x2, y2, z2))
+    return f
 
 # shell(other, 0)
 @op3

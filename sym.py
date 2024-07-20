@@ -24,7 +24,7 @@ def triangle(s,V1,V2,V3,G):
     g = rectangle(G).rotate(pi/4)
     return groove(s,e,g)
 
-def subdivide(s, V1, V2, V3, n):
+def subdivide(s, V1, V2, V3, G, n):
     #V1 = normalize(V1)
     #V2 = normalize(V2)
     #V3 = normalize(V3)
@@ -37,7 +37,7 @@ def subdivide(s, V1, V2, V3, n):
         #s = subdivide(s,V23,V31,V12,n-1)
         #s = s.fold(cross(V23,V12)).fold(cross(V31,V23)).fold(cross(V12,V31))
     else:
-        s = triangle(s,V1,V2,V3,1)
+        s = triangle(s,V1,V2,V3,G)
     return s
 
 

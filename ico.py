@@ -16,9 +16,13 @@ def ico(fund):
     return fund.fold(cross(V1,V2)).fold(cross(V2,V3)).fold(cross(V3,V1)).fold()
 
 if __name__ == '__main__':
+    R = 25
+    G = 2
+
     #s = triangle(sphere(25),V1,V2,V3, G=1)
-    s = sphere(25)
-    s =  ico(subdivide(s, V1, V2, V3, 1))
+    s = sphere(R)
+    s = subdivide(s, V1, V2, V3, G, 0)
+    s = ico(s)
 
     D = 30
     step = D/128

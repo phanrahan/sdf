@@ -15,7 +15,7 @@ if __name__ == '__main__':
     R = 25
     G = 2
 
-    s = subdivide(sphere(R), G, V1, V2, V3)
+    s = subdivide(sphere(R), G, V1, V2, V3, 0)
 
     s = tet(s)
 

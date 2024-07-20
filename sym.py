@@ -20,7 +20,7 @@ def triangle(s,V1,V2,V3,G):
     e1 = surface(plane(cross(V1, V2)))
     e2 = surface(plane(cross(V2, V3)))
     e3 = surface(plane(cross(V3, V1)))
-    e = e1 | e3 | e2
+    e = e1 | e2 | e3
     g = rectangle(G).rotate(pi/4)
     return groove(s,e,g)
 
@@ -33,8 +33,8 @@ def subdivide(s, V1, V2, V3, n):
         V23 = V2 + V3
         V31 = V3 + V1
         s = subdivide(s,V12,V23,V31,n-1)
-        #s = subdivide(s,V23,V31,V12,n-1)
         s = s.fold(cross(V12,V23)).fold(cross(V23,V31)).fold(cross(V31,V12))
+        #s = subdivide(s,V23,V31,V12,n-1)
         #s = s.fold(cross(V23,V12)).fold(cross(V31,V23)).fold(cross(V12,V31))
     else:
         s = triangle(s,V1,V2,V3,1)

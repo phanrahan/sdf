@@ -42,5 +42,11 @@ def subdivide(s, V1, V2, V3, G, n):
     return s
 
 
+#def ico(fund):
+#    return fund.fold(cross(V1,V2)).fold(cross(V2,V3)).fold(cross(V3,V1)).fold()
 
+#def oct(f):
+#    return f.fold()
 
+#def tet(f):
+#    return f.fold(cross(V1,V2)).fold(cross(V2,V3)).fold(cross(V3,V1))

@@ -1,7 +1,5 @@
-from math import pi
 from np_sdf import vec3, cross
-from sdf import sphere, plane, rectangle
-from ops import surface, groove
+from sdf import sphere
 from sym import subdivide
 
 V1 = vec3( 1,-1, 1)
@@ -16,7 +14,7 @@ if __name__ == '__main__':
     G = 1
 
     s = sphere(R)
-    s = subdivide(s, V1, V2, V3, G, 0)
+    s = subdivide(s, V1, V2, V3, G, 2)
     s = tet(s)
 
     D = R+5

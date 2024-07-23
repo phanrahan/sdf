@@ -1,8 +1,7 @@
-from math import sqrt, pi
+from math import sqrt
 from np_sdf import vec3, cross 
-from sdf import sphere, plane, rectangle
-from ops import surface, groove
-from sym import triangle, subdivide
+from sdf import sphere
+from sym import subdivide
 
 PHI = (1.+sqrt(5.))/2.
 A = PHI / sqrt( 1. + PHI*PHI )
@@ -17,11 +16,10 @@ def ico(fund):
 
 if __name__ == '__main__':
     R = 25
-    G = 2
+    G = 1
 
-    #s = triangle(sphere(25),V1,V2,V3, G=1)
     s = sphere(R)
-    s = subdivide(s, V1, V2, V3, G, 0)
+    s = subdivide(s, V1, V2, V3, G, 2)
     s = ico(s)
 
     D = 30

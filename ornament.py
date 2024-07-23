@@ -19,13 +19,6 @@ class App(object):
     def ball(self):
         self.name = 'ball'
 
-    def dots(self):
-        f = fan(self.N)
-        diag1 = f.twist( pi).scale(self.R)
-        diag2 = f.twist(-pi).scale(self.R)
-        self.s |= place(self.s, diag1.orient(X), diag2.orient(X), sphere())
-        self.name = 'dots'
-
     def rhumb(self):
         f = fan(self.N)
         diag1 = f.rhumb( pi/4).scale(self.R)
@@ -55,6 +48,15 @@ class App(object):
         self.s = groove(self.s, diag2.orient(X), self.groove)
         self.s = groove(self.s, f.orient(X), self.groove)
         self.name = 'hex'
+
+    # place spheres at the intersections of a diamond pattern
+    def dots(self):
+        f = fan(self.N)
+        diag1 = f.twist( pi).scale(self.R)
+        diag2 = f.twist(-pi).scale(self.R)
+        self.s |= place(self.s, diag1.orient(X), diag2.orient(X), sphere())
+        self.name = 'dots'
+
 
     def baseball(self):
         # subtract an inner sphere to form shell

@@ -60,7 +60,9 @@ class App(object):
 
             D = self.R+5
             step = D/128
-            s.translate((step/2,step/2,step/2)).save(self.name + str(self.N) + '.stl', step=step, bounds=((-D, -D, -D), (D, D, D)))
+            filename = self.name + str(self.N) + '.stl'
+            print('saving', filename)
+            s.translate((step/2,step/2,step/2)).save(filename, step=step, bounds=((-D, -D, -D), (D, D, D)))
 
 if __name__ == '__main__':
   app = App()

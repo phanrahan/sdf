@@ -3,9 +3,6 @@ from np_sdf import np, abs, min, vec3, dot, cross, normalize
 from ops import surface, groove
 from sdf import op3, plane, rectangle
 
-def unit_plane(n):
-    return plane(normalize(n))
-
 @op3
 def fold(other, n=None):
     if n is not None:
@@ -21,9 +18,9 @@ def fold(other, n=None):
     return f
 
 def triangle(V1,V2,V3):
-    e1 = surface(unit_plane(cross(V1, V2)))
-    e2 = surface(unit_plane(cross(V2, V3)))
-    e3 = surface(unit_plane(cross(V3, V1)))
+    e1 = surface(plane(cross(V1, V2)))
+    e2 = surface(plane(cross(V2, V3)))
+    e3 = surface(plane(cross(V3, V1)))
     return e1 | e2 | e3
 
 def subdivide(V1, V2, V3, n):

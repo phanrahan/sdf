@@ -2,7 +2,7 @@
 # explained in more detail at https://www.ronja-tutorials.com/
 
 from math import sqrt
-from np_sdf import np, abs, min, max, vec, vec3, vec2d, vec3d, length, tan, atan2, cos, sin, arcsinh
+from glsl import np, abs, min, max, vec, vec3, vec2d, vec3d, length, tan, atan2, cos, sin, arcsinh
 from sdf import sdf2, sdf3, op3, union, intersection, plane, circle, rectangle, X, Y, Z, ORIGIN, UP
 
 def gradient(f, p):

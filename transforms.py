@@ -1,4 +1,4 @@
-from np_sdf import np, vec, length, tan, cot, atan2, arcsinh, clamp, smoothstep
+from glsl import np, vec, length, tan, cot, atan2, arcsinh, clamp, smoothstep
 from sdf import op3
 
 # coordinate systems

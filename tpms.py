@@ -1,7 +1,7 @@
 # https://github.com/fogleman/sdf/pull/31
 #   see also https://nodtem66.github.io/Scaffolder/tutorial_2/
 
-from np_sdf import np, vec3, abs, min, max, length, cos, sin, cosh, sinh
+from glsl import np, vec3, abs, min, max, length, cos, sin, cosh, sinh
 from sdf import sdf3
 
 #MetaCORE surfaces

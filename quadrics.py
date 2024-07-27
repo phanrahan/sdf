@@ -1,5 +1,5 @@
 from math import sqrt
-from np_sdf import abs, length
+from glsl import abs, length
 from sdf import sdf3
 
 @sdf3

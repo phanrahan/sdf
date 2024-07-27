@@ -1,26 +1,31 @@
 from math import pi
-from np_sdf import np, abs, min, vec3, dot, cross, normalize
+from glsl import np, abs, min, vec3, dot, cross, normalize
 from ops import surface, groove
-from sdf import op3, plane, rectangle
+from sdf import op3, sphere, plane, rectangle
 
 @op3
-def fold(other, n=None):
-    if n is not None:
-        #isinstance(my_array, np.ndarray)
-        n = normalize(n)
+def fold_xyx(other):
     def f(p):
-        if n is None:
-            p = abs(p)
-        else:
-            d = min(dot(p, n), 0)
-            p -= 2 * np.outer(d, n)
+        p = abs(p)
+        return(other(p))
+    return f
+
+@op3
+def fold(other, n):
+    n = normalize(n)
+    def f(p):
+        d = min(dot(p, n), 0)
+        p -= 2 * np.outer(d, n)
         return other(p)
     return f
 
 def triangle(V1,V2,V3):
-    e1 = surface(plane(cross(V1, V2)))
-    e2 = surface(plane(cross(V2, V3)))
-    e3 = surface(plane(cross(V3, V1)))
+    #e1 = surface(plane(cross(V1, V2)))
+    #e2 = surface(plane(cross(V2, V3)))
+    #e3 = surface(plane(cross(V3, V1)))
+    e1 = sphere(0.2,center=V1)
+    e2 = sphere(0.2,center=V2)
+    e3 = sphere(0.2,center=V3)
     return e1 | e2 | e3
 
 def subdivide(V1, V2, V3, n):
@@ -35,6 +40,8 @@ def subdivide(V1, V2, V3, n):
         s = s.fold(cross(V12,V23)).fold(cross(V23,V31)).fold(cross(V31,V12))
     else:
         s = triangle(V1,V2,V3)
+        #s = s.fold(cross(V1,V2)).fold(cross(V2,V3)).fold(cross(V3,V1))
+
     return s
 
 

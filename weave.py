@@ -1,5 +1,5 @@
 from math import sqrt
-from np_sdf import vec3
+from glsl import vec3
 from sdf import rounded_box, cylinder, slab, ease, X, Y, Z
 
 root3 = sqrt(3.0)

@@ -4,81 +4,80 @@ from sdf import plane, slab, sphere, rectangle, X, Y, Z
 from quadrics import double_cone
 from ops import fan, slices, groove, place
 
+R = 25
+N = 24
+G = 0.25
+SHELL = .15
+SMOOTH = 1.
 
 class App(object):
-    def __init__(self, r=25, n=24, g=.25):
-        self.R = r
-        self.N = n
-        self.G = g
-        self.SHELL = .15
-        self.SMOOTH = 1.
+    def sphere(self, r):
+        self._R = r
+        self._s = sphere(r)
+        return self
 
-        self.s = sphere(self.R)
-        self.groove =  rectangle(self.G).rotate(pi/4)
+    def rhumb(self, n, g):
+        print("rhumb", n)
+        f = fan(n)
+        diag1 = f.rhumb( pi/4).scale(self._R)
+        diag2 = f.rhumb(-pi/4).scale(self._R)
+        vgroove = rectangle(g).rotate(pi/4)
+        self._s = groove(self._s, diag1.orient(X), vgroove)
+        self._s = groove(self._s, diag2.orient(X), vgroove)
+        return self
 
-    def ball(self):
-        self.name = 'ball'
+    def diamond(self, n, g):
+        f = fan(n)
+        diag1 = f.twist( pi).scale(self._R)
+        diag2 = f.twist(-pi).scale(self._R)
+        vgroove = rectangle(g).rotate(pi/4)
+        self._s = groove(self._s, diag1.orient(X), vgroove)
+        self._s = groove(self._s, diag2.orient(X), vgroove)
+        return self
 
-    def rhumb(self):
-        f = fan(self.N)
-        diag1 = f.rhumb( pi/4).scale(self.R)
-        diag2 = f.rhumb(-pi/4).scale(self.R)
-        self.s = groove(self.s, diag1.orient(X), self.groove)
-        self.s = groove(self.s, diag2.orient(X), self.groove)
-        self.name = 'rhumb'
+    def triangle(self, n, g):
+        self.diamond(n, g)
+        vgroove = rectangle(g).rotate(pi/4)
+        self._s = groove(self._s, fan(2*n).orient(X), vgroove)
+        return self
 
-    def diamond(self):
-        f = fan(self.N)
-        diag1 = f.twist( pi).scale(self.R)
-        diag2 = f.twist(-pi).scale(self.R)
-        self.s = groove(self.s, diag1.orient(X), self.groove)
-        self.s = groove(self.s, diag2.orient(X), self.groove)
-        self.name = 'diamond'
-
-    def triangle(self):
-        self.diamond()
-        self.s = groove(self.s, fan(2*self.N).orient(X), self.groove)
-        self.name = 'triangle'
-
-    def hex(self):
-        f = fan(self.N)
-        diag1 = f.twist( pi/2).scale(self.R)
-        diag2 = f.twist(-pi/2).scale(self.R)
-        self.s = groove(self.s, diag1.orient(X), self.groove)
-        self.s = groove(self.s, diag2.orient(X), self.groove)
-        self.s = groove(self.s, f.orient(X), self.groove)
-        self.name = 'hex'
+    def hex(self, n, g):
+        f = fan(n)
+        diag1 = f.twist( pi/2).scale(self._R)
+        diag2 = f.twist(-pi/2).scale(self._R)
+        vgroove =  rectangle(g).rotate(pi/4)
+        self._s = groove(self._s, diag1.orient(X), vgroove)
+        self._s = groove(self._s, diag2.orient(X), vgroove)
+        self._s = groove(self._s, f.orient(X), vgroove)
+        return self
 
     # place spheres at the intersections of a diamond pattern
-    def dots(self):
-        f = fan(self.N)
-        diag1 = f.twist( pi).scale(self.R)
-        diag2 = f.twist(-pi).scale(self.R)
-        self.s |= place(self.s, diag1.orient(X), diag2.orient(X), sphere())
-        self.name = 'dots'
+    def dots(self, n):
+        f = fan(n)
+        diag1 = f.twist( pi).scale(self._R)
+        diag2 = f.twist(-pi).scale(self._R)
+        self._s |= place(self._s, diag1.orient(X), diag2.orient(X), sphere())
+        return self
 
-
-    def baseball(self):
+    def baseball(self, shell, smooth):
         # subtract an inner sphere to form shell
-        self.s = self.s - sphere((1-self.SHELL)*self.R)
+        s = self._s - sphere((1-shell)*self._R)
 
         # remove a double cone oriented in Z, smooth the intersection
-        f = self.s - double_cone().k(self.SMOOTH)
+        f = s - double_cone().k(smooth)
         # remove positive x halfspace
-        f &= slab(x0=-2*self.R, x1=0)
+        f &= slab(x0=-2*self._R, x1=0)
 
         # form a double cone shaped cap oriented along Y
-        g = self.s & (double_cone().orient(Y).k(self.SMOOTH))
+        g = s & (double_cone().orient(Y).k(smooth))
 
         # return the union of the two pieces
-        self.s = f | g
+        self._s = f | g
+        return self
 
-    def exit(self):
-        self.s = self.s.translate((0.05,0.05,0.05))
-        self.s.save(self.name + '.stl', step=(0.1, 0.1, 0.1), bounds=((-30,-30,-30),(30,30,30)))
+    def save(self, name):
+        s = self._s.translate((0.05,0.05,0.05))
+        s.save(name + '.stl', step=(0.1, 0.1, 0.1), bounds=((-30,-30,-30),(30,30,30)))
 
 if __name__ == '__main__':
-  app = App()
-  fire.Fire(app)
-  app.baseball()
-  app.exit()
+  app = fire.Fire(App)
